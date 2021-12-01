@@ -30,6 +30,10 @@ public class ImplementationGreville {
 		Matrix matAPlus, matAk, matAPlusk, matNulle, colNulle, ligneNulle, transpose, a, b, c, d, tmp;
 		int n, m;
 		
+
+		n = matA.getRowDimension();
+		m = matA.getColumnDimension();
+		
 		matAPlus = new Matrix(n, m);
 		matNulle = new Matrix(n, m);
 		colNulle = new Matrix(n, 1);
@@ -57,7 +61,7 @@ public class ImplementationGreville {
 			d = matAPlusk.times(a);
 			
 			
-			//Entr�e : d est un chiffre et non une matrice
+			//Entrée : d est un chiffre et non une matrice
 			if(d.getRowDimension() == 1 && d.getColumnDimension() == 1) {
 				dDouble = d.get(0, 0);
 				c = a.minus(matAk.times(dDouble));
@@ -66,7 +70,7 @@ public class ImplementationGreville {
 			}
 
 			
-			//Entr�e : c est nulle
+			//Entrée : c'est une matrice nulle
 			if(c.equals(new Matrix(c.getRowDimension(), 1))) {
 				transpose = d.transpose();
 				b = Matrix.identity(n, m).plus(transpose.times(d));
