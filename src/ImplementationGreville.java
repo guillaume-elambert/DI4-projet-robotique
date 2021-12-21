@@ -27,44 +27,44 @@ static Matrix matA, resultat;
 		System.out.println("Résultat final :");
 		resultat.print(5,5);
 	}
-	
-	
+
+
 	static Matrix greville(Matrix matA) {
-		
+
 
 		Matrix matAPlus, matAk, matAPlusk, transpose, a, b, c, d;
 		int n, m, rowMatAPlusk;
-		
+
 
 		n = matA.getRowDimension();
 		m = matA.getColumnDimension();
-		
+
 		matAPlus = new Matrix(1, n);
-		
-		
+
+
 		/*======== 1ere iteration ========*/
 
 		//On récupère la 1ère colonne
-		a = matA.getMatrix(0, n-1, 0, 0);
+		a = matA.getMatrix(0, n - 1, 0, 0);
 
-		if(!a.equals(new Matrix(n, 1))) {
+		if (!a.equals(new Matrix(n, 1))) {
 			transpose = a.transpose();
 			matAPlusk = transpose.times(a).inverse().times(transpose);
-			
+
 			rowMatAPlusk = matAPlusk.getColumnDimension();
-			matAPlus.setMatrix(0, 0, 0, rowMatAPlusk-1, matAPlusk);
+			matAPlus.setMatrix(0, 0, 0, rowMatAPlusk - 1, matAPlusk);
 
 		}
-		
+
 		double dDouble;
 
-		for(int k = 1; k < m; ++k) {
-			matAk = matA.getMatrix(0, n-1, 0, k-1);
-			matAPlusk = matAPlus.getMatrix(0, k-1, 0, n-1);
-			
-			
-			a = matA.getMatrix(0, n-1, k, k);
-			
+		for (int k = 1; k < m; ++k) {
+			matAk = matA.getMatrix(0, n - 1, 0, k - 1);
+			matAPlusk = matAPlus.getMatrix(0, k - 1, 0, n - 1);
+
+
+			a = matA.getMatrix(0, n - 1, k, k);
+
 			d = matAPlusk.times(a);
 
 			//Entrée : d est un chiffre et non une matrice
@@ -78,12 +78,12 @@ static Matrix matA, resultat;
 			//On vérifie si la matrice est nulle
 			int notNullCount = 0, cRow = c.getRowDimension(), cCol = c.getColumnDimension();
 			double laValeur;
-			for(int i = 0; i < cRow && notNullCount == 0; ++i){
-				for(int j = 0; j < cCol && notNullCount == 0; ++j){
-					laValeur=c.get(i,j);
+			for (int i = 0; i < cRow && notNullCount == 0; ++i) {
+				for (int j = 0; j < cCol && notNullCount == 0; ++j) {
+					laValeur = c.get(i, j);
 					if (laValeur != 0.0) {
 						//On fait une approxiamtion à 10^-10
-						if ( ((long)laValeur * 1e10) / 1e10 == 0.0) {
+						if (((long) laValeur * 1e10) / 1e10 == 0.0) {
 							c.set(i, j, 0.0);
 							break;
 						}
@@ -93,13 +93,12 @@ static Matrix matA, resultat;
 			}
 
 
-
 			//Entrée : c'est une matrice nulle
-			if(notNullCount == 0) {
+			if (notNullCount == 0) {
 				transpose = d.transpose();
 				b = transpose.times(d);
 				b = Matrix.identity(b.getRowDimension(), b.getColumnDimension()).plus(b);
-				b = b.inverse().times(transpose).times(matAPlusk); 
+				b = b.inverse().times(transpose).times(matAPlusk);
 			} else {
 				transpose = c.transpose();
 				b = transpose.times(c).inverse().times(transpose);
@@ -109,16 +108,15 @@ static Matrix matA, resultat;
 			rowMatAPlusk = matAPlusk.getRowDimension();
 
 
-			
-			Matrix tmp = new Matrix(b.getRowDimension()+matAPlus.getRowDimension(), matAPlus.getColumnDimension());
-			tmp.setMatrix(0, matAPlus.getRowDimension()-1, 0, matAPlus.getColumnDimension()-1, matAPlus);
+			Matrix tmp = new Matrix(b.getRowDimension() + matAPlus.getRowDimension(), matAPlus.getColumnDimension());
+			tmp.setMatrix(0, matAPlus.getRowDimension() - 1, 0, matAPlus.getColumnDimension() - 1, matAPlus);
 			matAPlus = tmp;
-			
-			matAPlus.setMatrix(0, rowMatAPlusk-1, 0, n-1, matAPlusk);
-			matAPlus.setMatrix(rowMatAPlusk, rowMatAPlusk, 0, b.getColumnDimension()-1, b);
+
+			matAPlus.setMatrix(0, rowMatAPlusk - 1, 0, n - 1, matAPlusk);
+			matAPlus.setMatrix(rowMatAPlusk, rowMatAPlusk, 0, b.getColumnDimension() - 1, b);
 
 		}
-		
+
 		return matAPlus;
 	}
 	
