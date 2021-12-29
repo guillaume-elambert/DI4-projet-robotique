@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RobotTest {
 
@@ -96,6 +97,10 @@ class RobotTest {
 
     @Test
     void getMatriceJacobienne() {
+        Matrix tmp = robots[1].getMatriceJacobienne(null);
+        /*Matrix inv = ImplementationGreville.greville(tmp);
+        tmp.print(20,20);
+        inv.print(20,20);
         /*attendus.clear();
 
         attendus.add(new double[][]{});
@@ -148,11 +153,20 @@ class RobotTest {
     void copy() {
         attendus.clear();
         Robot robotCopy;
+        ArrayList<Articulation> originale, copie;
+        int size;
 
         //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
         for(int i = 0; i < nbTests; ++i) {
             robotCopy = robots[i].copy();
-            assertArrayEquals(robots[i].getArticulations().toArray(), robotCopy.getArticulations().toArray());
+            originale = robots[i].getArticulations();
+            copie = robotCopy.getArticulations();
+            size = originale.size();
+
+            for(int j = 0; j < size; ++j){
+                assertEquals(originale.get(j).toString(), copie.get(j).toString());
+            }
+
         }
     }
 
@@ -168,9 +182,9 @@ class RobotTest {
         attendus.add(new double[][]{
                 {0, 135, 1.5}
         });
-
         //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
         for(int i = 0; i < nbTests; ++i) {
+            double[] vars = robots[i].getVariablesArticulaires();
             assertArrayEquals(attendus.get(i)[0], robots[i].getVariablesArticulaires());
         }
     }

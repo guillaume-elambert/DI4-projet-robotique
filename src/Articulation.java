@@ -34,6 +34,18 @@ public class Articulation {
 
 
     /**
+     * Constructeur de copie.
+     *
+     * @param toCopy L'objet à copier.
+     */
+    public Articulation(Articulation toCopy){
+        denavit = new ParametresDenavit(toCopy.getDenavit());
+        position = new Position(toCopy.getPosition());
+        type = toCopy.getType();
+    }
+
+
+    /**
      * Méthode qui retourne la variable articulaire de l'articulation.
      *
      * @return La valeur de la variable articulaire (avec theta en degrés).

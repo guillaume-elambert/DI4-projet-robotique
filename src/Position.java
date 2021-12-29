@@ -37,6 +37,18 @@ public class Position {
 
 
     /**
+     * Constructeur de recopie.
+     *
+     * @param toCopy L'objet Position à copier.
+     */
+    public Position(Position toCopy){
+        x = toCopy.x;
+        y = toCopy.y;
+        z = toCopy.z;
+    }
+
+
+    /**
      * Retourne l'objet sous forme de tableau.
      *
      * @return Le tableau à 2 dimensions de la position.

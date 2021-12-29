@@ -27,6 +27,19 @@ public class ParametresDenavit {
 
 
     /**
+     * Constructeur de copie.
+     *
+     * @param toCopy L'objet à copier.
+     */
+    public ParametresDenavit(ParametresDenavit toCopy){
+        theta = toCopy.theta;
+        d = toCopy.d;
+        alpha = toCopy.alpha;
+        a = toCopy.a;
+    }
+
+
+    /**
      * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
      *
      * @return L'objet sous forme de chaîne de caractères.

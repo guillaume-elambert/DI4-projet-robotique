@@ -26,8 +26,8 @@ public class Robot {
     public Robot(Position base, ArrayList<Articulation> articulations) {
         this.base = base;
         this.articulations = articulations;
-        architectureChanged = false;
-        matricesTransformation = calculerMatricesTransformation(null);
+        architectureChanged = true;
+        //matricesTransformation = calculerMatricesTransformation(null);
     }
 
 
@@ -104,7 +104,7 @@ public class Robot {
             variablesArticulairesCpy[i] += epsilon;
 
             position2 = getPositionOrganeTerminal(variablesArticulairesCpy).getAsArray();
-            System.out.println(getPositionOrganeTerminal(variablesArticulairesCpy).toString());
+            //System.out.println(getPositionOrganeTerminal(variablesArticulairesCpy).toString());
 
             matJacobienne[0][i] = (position2[0][0] - positionInitiale[0][0]) / epsilon;
             matJacobienne[1][i] = (position2[1][0] - positionInitiale[1][0]) / epsilon;
@@ -124,6 +124,9 @@ public class Robot {
      */
     public Matrix[] calculerMatricesTransformation(double[] variablesArticulaires) {
 
+        Robot robotCopy = this.copy();
+
+        ArrayList<Articulation> articulations = robotCopy.getArticulations();
         int nbArticulations = articulations.size();
         Matrix transformation = Matrix.identity(4,4);
         Matrix[] T = new Matrix[nbArticulations];
@@ -137,9 +140,10 @@ public class Robot {
             variablesArticulaires = getVariablesArticulaires();
         }
 
-
+        //System.out.println("Variables articulaires : ");
         // On parcourt les articulations en partant de la fin
-        for (int i = 0, j = 0; i < nbArticulations; ++i){
+        for (int i = 0; i < nbArticulations; ++i){
+            //System.out.print(variablesArticulaires[i]+"\t");
 
             uneArticulation = articulations.get(i);
             paramsArticulation = uneArticulation.getDenavit();
@@ -147,13 +151,13 @@ public class Robot {
 
             //Si l'articulation est du type ROTATION, on récupère la prochaine variable articulaire
             paramsArticulation.setTheta(switch(leType){
-                case ROTATION -> Math.toRadians(variablesArticulaires[j++]);
+                case ROTATION -> Math.toRadians(variablesArticulaires[i]);
                 default -> Math.toRadians(paramsArticulation.getTheta());
             });
 
             //Si l'articulation est du type TRANSLATION, on récupère la prochaine variable articulaire
             paramsArticulation.setD(switch(leType){
-                case TRANSLATION -> variablesArticulaires[j++];
+                case TRANSLATION -> variablesArticulaires[i];
                 default -> paramsArticulation.getD();
             });
 
@@ -165,7 +169,7 @@ public class Robot {
             T[i] = transformation.copy();
         }
 
-
+        //System.out.println("\n");
         Matrix baseMatrix = new Matrix(new double[][]{
                 { base.getX() },
                 { base.getY() },
@@ -207,7 +211,7 @@ public class Robot {
      */
     public void update(){
         if(architectureChanged){
-            matricesTransformation = calculerMatricesTransformation(null);
+            matricesTransformation = calculerMatricesTransformation(getVariablesArticulaires());
         }
     }
 
@@ -218,7 +222,13 @@ public class Robot {
      * @return La copie du robot.
      */
     public Robot copy(){
-        return new Robot(this.base, this.articulations);
+        ArrayList<Articulation> articulationsCopy = new ArrayList<Articulation>();
+
+        for(Articulation uneArticulation : articulations){
+            articulationsCopy.add(new Articulation(uneArticulation));
+        }
+
+        return new Robot(new Position(this.base), articulationsCopy);
     }
 
 
