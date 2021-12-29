@@ -49,6 +49,7 @@ public class Position {
         };
     }
 
+
     /**
      * Retourne l'objet sous forme de matrice.
      *
@@ -60,6 +61,18 @@ public class Position {
                 {y},
                 {z}
         });
+    }
+
+
+    /**
+     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
+     *
+     * @return L'objet sous forme de chaîne de caractères.
+     */
+    public String toString(){
+        return  "x : " + x +"\n"+
+                "y : " + y +"\n"+
+                "z : " + z;
     }
 
 

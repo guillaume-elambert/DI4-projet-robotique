@@ -44,9 +44,9 @@ public class main {
         ));*/
 
 
-        robot = new Robot(base, articulations);
+       robot = new Robot(base, articulations);
 
-        Matrix[] results = robot.getMatricesTransformation();
+        Matrix[] results = robot.calculerMatricesTransformation(null);
 
        for (Matrix T : results) {
             T.print(10,10);

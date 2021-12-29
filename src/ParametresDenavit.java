@@ -26,6 +26,11 @@ public class ParametresDenavit {
     }
 
 
+    /**
+     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
+     *
+     * @return L'objet sous forme de chaîne de caractères.
+     */
     public String toString(){
         return  "Theta (θ) = "+theta+"\n" +
                 "d = "+d+"\n" +

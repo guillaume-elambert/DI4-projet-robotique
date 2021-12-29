@@ -7,8 +7,6 @@ public class Articulation {
         TRANSLATION
     }
 
-    ;
-
     private ParametresDenavit denavit;
     private Position position;
     private Type type;
@@ -42,7 +40,7 @@ public class Articulation {
      */
     public double getVariableArticulaire(){
         return switch (type) {
-            case ROTATION -> this.denavit.getTheta();
+            case ROTATION -> Math.toDegrees(this.denavit.getTheta());
             case TRANSLATION -> this.denavit.getD();
         };
     }
@@ -81,6 +79,17 @@ public class Articulation {
 
 
         return matriceDenavit;
+    }
+
+    /**
+     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
+     *
+     * @return L'objet sous forme de chaîne de caractères.
+     */
+    public String toString(){
+        return  "Type : " + this.type.toString()+"\n\n" +
+                "Position : \n" + position.toString() + "\n\n"+
+                "Denavit : \n" + denavit.toString();
     }
 
     /**

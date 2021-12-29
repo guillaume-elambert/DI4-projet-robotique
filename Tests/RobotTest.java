@@ -59,6 +59,8 @@ class RobotTest {
     }
 
 
+
+
     @Test
     void getPositionOrganeTerminal() {
         attendus.clear();
@@ -85,8 +87,34 @@ class RobotTest {
 
     }
 
+
     @Test
-    void getMatricesTransformation() {
+    void getOrientationOrganeTerminal() {
+        attendus.clear();
+    }
+
+
+    @Test
+    void getMatriceJacobienne() {
+        /*attendus.clear();
+
+        attendus.add(new double[][]{});
+
+        attendus.add(new double[][]{
+                {-0.016043744111016167, -0.016043744111016167, 0.707106781128175},
+                {0.020980280512894467, 0.020980280512894467, 0.707106781128175},
+                {0, 0, 0}
+        });
+
+        //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
+        for(int i = nbTests -1; i > 0; --i) {
+            assertArrayEquals(attendus.get(i), robots[i].getMatriceJacobienne(null).getArray());
+        }*/
+    }
+
+
+    @Test
+    void calculerMatricesTransformation() {
         attendus.clear();
 
         //Le résultat attendu pour la 1ère architecture de robot
@@ -110,32 +138,40 @@ class RobotTest {
 
         //On parcourt les architectures de robots et on vérifie qu'on obtient bien la même chose que ce qui est attendu.
         for (int i = 0; i < nbTests; ++i) {
-            results = robots[i].getMatricesTransformation();
+            results = robots[i].calculerMatricesTransformation(null);
             assertArrayEquals(attendus.get(i), results[articulations[i].size() - 1].getArray());
         }
     }
 
 
     @Test
-    void inverseKinetic() {
-        attendus.clear();
-    }
-
-    @Test
-    void getValeursArticulaires() {
-        attendus.clear();
-    }
-
-    @Test
     void copy() {
         attendus.clear();
-
         Robot robotCopy;
 
         //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
         for(int i = 0; i < nbTests; ++i) {
             robotCopy = robots[i].copy();
             assertArrayEquals(robots[i].getArticulations().toArray(), robotCopy.getArticulations().toArray());
+        }
+    }
+
+
+    @Test
+    void getVariablesArticulaires() {
+        attendus.clear();
+
+        attendus.add(new double[][]{
+                {45, 90}
+        });
+
+        attendus.add(new double[][]{
+                {0, 135, 1.5}
+        });
+
+        //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
+        for(int i = 0; i < nbTests; ++i) {
+            assertArrayEquals(attendus.get(i)[0], robots[i].getVariablesArticulaires());
         }
     }
 }
