@@ -20,14 +20,13 @@ public class Robot {
      * Constructeur de confort.
      * Les matrices de transfomations sont relatives à l'articulation 1;
      *
-     * @param base          La position de la base du robot.
-     * @param articulations Les articulations du robot.
+     * @param base          L'objet {@link Position} de la base du robot.
+     * @param articulations Les {@link Articulation} du robot.
      */
     public Robot(Position base, ArrayList<Articulation> articulations) {
         this.base = base;
         this.articulations = articulations;
         architectureChanged = true;
-        //matricesTransformation = calculerMatricesTransformation(null);
     }
 
 
@@ -87,24 +86,28 @@ public class Robot {
      */
     public Matrix getMatriceJacobienne(double[] variablesArticulaires){
 
+        //Si null on utilise les variables articulaires de l'architecture actuelle du robot
         if(variablesArticulaires == null || variablesArticulaires.length == 0) {
             variablesArticulaires = getVariablesArticulaires();
         }
 
+        int nbVariablesArticulaires = variablesArticulaires.length;
         double[][] matJacobienne = new double[3][variablesArticulaires.length];
         double[][] positionInitiale, position2;
         double epsilon = 1E-6;
-        double[] variablesArticulairesCpy;
+        double[] nouvellesVariablesArticulaires = new double[nbVariablesArticulaires];
 
         positionInitiale = getPositionOrganeTerminal(variablesArticulaires).getAsArray();
 
-        for (int i = 0; i < variablesArticulaires.length; i++) {
+        for (int i = 0; i < nbVariablesArticulaires; i++) {
 
-            variablesArticulairesCpy = variablesArticulaires;
-            variablesArticulairesCpy[i] += epsilon;
+            //On copie la liste des variables articulaires
+            System.arraycopy(variablesArticulaires, 0, nouvellesVariablesArticulaires, 0, nbVariablesArticulaires);
 
-            position2 = getPositionOrganeTerminal(variablesArticulairesCpy).getAsArray();
-            //System.out.println(getPositionOrganeTerminal(variablesArticulairesCpy).toString());
+            //nouvellesVariablesArticulaires = variablesArticulaires;
+            nouvellesVariablesArticulaires[i] += epsilon;
+
+            position2 = getPositionOrganeTerminal(nouvellesVariablesArticulaires).getAsArray();
 
             matJacobienne[0][i] = (position2[0][0] - positionInitiale[0][0]) / epsilon;
             matJacobienne[1][i] = (position2[1][0] - positionInitiale[1][0]) / epsilon;
@@ -117,10 +120,52 @@ public class Robot {
 
 
     /**
+     * Méthode qui calcule la valeur des variables articulaires afin d'arriver au plus proche de l'objectif.
+     *
+     * @param objectifOrganeTerminal L'objet {@link Position} qui définit la position objectif de l'organe terminal.
+     * @param maxIterations Le nombre maximum d'itérations à effectuer.
+     * @return La liste des variables articulaires pour se rapprocher au mieux de l'objectif.
+     */
+    public double[] resoudreVariablesArticulaires(Position objectifOrganeTerminal, int maxIterations){
+
+
+        double[] variablesArticulaires = this.getVariablesArticulaires();
+        int nbVariablesArticulaires = variablesArticulaires.length;
+        double[][] deltaTheta;
+
+
+        Position posOrgTerm = null;
+        Matrix deltaPos, pinvMatJacobienne, objectifMatrice = objectifOrganeTerminal.getAsMatrix();
+
+
+        //On s'arrête après maxIterations ou si on a obtenu la position attendue
+        for(int i = 0; i < maxIterations && !objectifOrganeTerminal.equals(posOrgTerm = getPositionOrganeTerminal(variablesArticulaires)); ++i){
+            //System.out.println(posOrgTerm.toString()+"\n\n");
+
+            // ΔX
+            deltaPos = objectifMatrice.minus(posOrgTerm.getAsMatrix());
+
+            // "J^-1(θ)"
+            pinvMatJacobienne = ImplementationGreville.greville(getMatriceJacobienne(variablesArticulaires));
+
+            // Δθ = "J^-1(θ)" * ΔX
+            deltaTheta = pinvMatJacobienne.times(deltaPos).getArray();
+
+            // On met à jour les variables articulaires
+            for(int j = 0; j < nbVariablesArticulaires; ++j) {
+                variablesArticulaires[j] += deltaTheta[j][0];
+            }
+        }
+
+        return variablesArticulaires;
+    }
+
+
+    /**
      * Cette fonction calcule les matrices de transformation.
      *
      * @param variablesArticulaires Les variables articulaires à utiliser (si null, utilise celles de l'architecture actuelle).
-     * @return La liste des matrices de transformation de Denavit.
+     * @return La liste des {@link Matrix} de transformation de Denavit.
      */
     public Matrix[] calculerMatricesTransformation(double[] variablesArticulaires) {
 
@@ -140,10 +185,8 @@ public class Robot {
             variablesArticulaires = getVariablesArticulaires();
         }
 
-        //System.out.println("Variables articulaires : ");
         // On parcourt les articulations en partant de la fin
         for (int i = 0; i < nbArticulations; ++i){
-            //System.out.print(variablesArticulaires[i]+"\t");
 
             uneArticulation = articulations.get(i);
             paramsArticulation = uneArticulation.getDenavit();
@@ -169,7 +212,6 @@ public class Robot {
             T[i] = transformation.copy();
         }
 
-        //System.out.println("\n");
         Matrix baseMatrix = new Matrix(new double[][]{
                 { base.getX() },
                 { base.getY() },
@@ -177,6 +219,7 @@ public class Robot {
         });
 
         int rowTostart = 0, rowToEnd = 2, column = 3;
+
 
         // On ajoute les valeursActuelle des coordonnées de la base sur la
         // 4e colonne des 3 premières lignes pour chaque articulation

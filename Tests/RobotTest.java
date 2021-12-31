@@ -3,8 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RobotTest {
 
@@ -83,27 +82,26 @@ class RobotTest {
         Position result;
         for(int i = 0; i < nbTests; ++i){
             result = robots[i].getPositionOrganeTerminal(null);
-            assertArrayEquals(attendus.get(i), result.getAsArray());
+            try {
+                assertArrayEquals(attendus.get(i), result.getAsArray());
+            } catch (AssertionError e){
+                System.err.println("Erreur lors du test n°"+(i+1));
+                e.printStackTrace();
+            }
         }
 
     }
 
 
     @Test
-    void getOrientationOrganeTerminal() {
-        attendus.clear();
-    }
-
-
-    @Test
     void getMatriceJacobienne() {
-        Matrix tmp = robots[1].getMatriceJacobienne(null);
-        /*Matrix inv = ImplementationGreville.greville(tmp);
-        tmp.print(20,20);
-        inv.print(20,20);
-        /*attendus.clear();
+        attendus.clear();
 
-        attendus.add(new double[][]{});
+        attendus.add(new double[][]{
+                {-0.02468268300859222, -0.012341341393273808},
+                {0, -0.01234134150429611},
+                {0, 0}
+        });
 
         attendus.add(new double[][]{
                 {-0.016043744111016167, -0.016043744111016167, 0.707106781128175},
@@ -111,10 +109,58 @@ class RobotTest {
                 {0, 0, 0}
         });
 
-        //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
-        for(int i = nbTests -1; i > 0; --i) {
-            assertArrayEquals(attendus.get(i), robots[i].getMatriceJacobienne(null).getArray());
-        }*/
+        Matrix result;
+
+        //On parcourt les architectures de robots et on vérifie qu'on obtient bien la même chose que ce qui est attendu.
+        for (int i = 0; i < nbTests; ++i) {
+            result = robots[i].getMatriceJacobienne(null);
+
+            try {
+                assertArrayEquals(attendus.get(i), result.getArray());
+            } catch (AssertionError e){
+                System.err.println("Erreur lors du test n°"+(i+1));
+                throw e;
+            }
+        }
+    }
+
+
+    @Test
+    void resoudreVariablesArticulaires(){
+        attendus.clear();
+
+        attendus.add(new double[][]{
+                {1.5},  // x
+                {1},    // y
+                {0}     // z
+        });
+
+        attendus.add(new double[][]{
+                {1},    // x
+                {2},    // y
+                {1}     // z
+        });
+
+        double[] solution;
+        double[][] attendu, result;
+
+        //On parcourt les architectures de robots et on vérifie qu'on obtient bien la même chose que ce qui est attendu.
+        for (int i = 0; i < nbTests; ++i) {
+            attendu = attendus.get(i);
+            solution = robots[i].resoudreVariablesArticulaires(new Position(attendu), 1000);
+            result = robots[i].getPositionOrganeTerminal(solution).getAsArray();
+
+            try {
+                for(int j = 0; j < 3; ++j) {
+                    assertTrue(Math.abs(attendu[j][0] - result[j][0]) < 1e-10);
+                }
+            } catch (AssertionError e){
+                System.err.println("Erreur lors du test n°" + (i+1) + "\n" +
+                        "Attendu (± 1e-10) :\n" + new Position(attendu).toString()+ "\n\n" +
+                        "Obtenu :\n" + new Position(result));
+                throw e;
+            }
+        }
     }
 
 
@@ -144,7 +190,12 @@ class RobotTest {
         //On parcourt les architectures de robots et on vérifie qu'on obtient bien la même chose que ce qui est attendu.
         for (int i = 0; i < nbTests; ++i) {
             results = robots[i].calculerMatricesTransformation(null);
-            assertArrayEquals(attendus.get(i), results[articulations[i].size() - 1].getArray());
+            try {
+                assertArrayEquals(attendus.get(i), results[articulations[i].size() - 1].getArray());
+            } catch (AssertionError e){
+                System.err.println("Erreur lors du test n°"+(i+1));
+                throw e;
+            }
         }
     }
 
@@ -164,7 +215,12 @@ class RobotTest {
             size = originale.size();
 
             for(int j = 0; j < size; ++j){
-                assertEquals(originale.get(j).toString(), copie.get(j).toString());
+                try {
+                    assertEquals(originale.get(j).toString(), copie.get(j).toString());
+                } catch (AssertionError e){
+                    System.err.println("Erreur lors du test n°"+(i+1));
+                    throw e;
+                }
             }
 
         }
@@ -182,10 +238,16 @@ class RobotTest {
         attendus.add(new double[][]{
                 {0, 135, 1.5}
         });
+
         //On parcourt les architectures de robots et on vérifie que la copie est identique à l'originale
         for(int i = 0; i < nbTests; ++i) {
             double[] vars = robots[i].getVariablesArticulaires();
-            assertArrayEquals(attendus.get(i)[0], robots[i].getVariablesArticulaires());
+            try {
+                assertArrayEquals(attendus.get(i)[0], robots[i].getVariablesArticulaires());
+            } catch (AssertionError e){
+                System.err.println("Erreur lors du test n°"+(i+1));
+                throw e;
+            }
         }
     }
 }

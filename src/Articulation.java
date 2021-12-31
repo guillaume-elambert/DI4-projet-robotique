@@ -8,7 +8,7 @@ public class Articulation {
     }
 
     private ParametresDenavit denavit;
-    private Position position;
+//    private Position position;
     private Type type;
 
 
@@ -22,13 +22,13 @@ public class Articulation {
     /**
      * Constructeur de confort.
      *
-     * @param denavit  Les paramètres Denavit de l'articulation.
-     * @param position La position dans l'espace de l'articulation.
+     * @param denavit  Les {@link ParametresDenavit} de l'articulation.
+     * @param position La {@link Position} dans l'espace de l'articulation.
      * @param type     Le type de l'articulation.
      */
     public Articulation(ParametresDenavit denavit, Position position, Type type) {
         this.denavit = denavit;
-        this.position = position;
+//        this.position = position;
         this.type = type;
     }
 
@@ -40,7 +40,7 @@ public class Articulation {
      */
     public Articulation(Articulation toCopy){
         denavit = new ParametresDenavit(toCopy.getDenavit());
-        position = new Position(toCopy.getPosition());
+//        position = new Position(toCopy.getPosition());
         type = toCopy.getType();
     }
 
@@ -61,7 +61,7 @@ public class Articulation {
     /**
      * Méthode qui retourne la matrice de Denavit de l'articulation.
      *
-     * @return La matrice de Denavit de l'articulation.
+     * @return La {@link Matrix} de Denavit de l'articulation.
      */
     public Matrix getMatriceDenavit(){
         Matrix matriceDenavit = null;
@@ -100,7 +100,7 @@ public class Articulation {
      */
     public String toString(){
         return  "Type : " + this.type.toString()+"\n\n" +
-                "Position : \n" + position.toString() + "\n\n"+
+//                "Position : \n" + position.toString() + "\n\n"+
                 "Denavit : \n" + denavit.toString();
     }
 
@@ -120,20 +120,20 @@ public class Articulation {
     }
 
 
-    /**
-     * @return the position
-     */
-    public Position getPosition() {
-        return position;
-    }
-
-
-    /**
-     * @param position the position to set
-     */
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+//    /**
+//     * @return the position
+//     */
+//    public Position getPosition() {
+//        return position;
+//    }
+//
+//
+//    /**
+//     * @param position the position to set
+//     */
+//    public void setPosition(Position position) {
+//        this.position = position;
+//    }
 
 
 	/**

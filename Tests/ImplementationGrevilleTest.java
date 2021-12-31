@@ -2,8 +2,7 @@ import Jama.Matrix;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ImplementationGrevilleTest {
 
@@ -11,8 +10,6 @@ class ImplementationGrevilleTest {
     void grevilleTest() {
         ArrayList<Matrix> matrices = new ArrayList<>();
         ArrayList<double[][]> attendus = new ArrayList<>();
-        int nbTests, nbLignes, nbColonnes;
-        double[][] resultat, attendu;
 
         matrices.add(new Matrix(new double[][]{
                 {1, 0, 0},
@@ -52,34 +49,30 @@ class ImplementationGrevilleTest {
                 {(double)-135/5434, (double)-1/247, (double)631/5434, (double)-84/2717}
         });
 
-        nbTests = matrices.size();
+
+
+        int nbLignes, nbColonnes, nbTests = matrices.size();
+        double[][] resultat, attendu;
 
         for(int i = 0; i < nbTests; ++i) {
             resultat = ImplementationGreville.greville(matrices.get(i)).getArray();
+            attendu = attendus.get(i);
             nbLignes = resultat.length;
             nbColonnes = resultat[0].length;
 
-            for(int j = 0; j < nbLignes; ++j){
-                for(int k = 0; k < nbColonnes; ++k){
-                    resultat[j][k] = ((long) resultat[j][k] * 1e10) / 1e10;
-                }
-            }
 
-            attendu = attendus.get(i);
-            nbLignes = attendu.length;
-            nbColonnes = attendu[0].length;
 
             for(int j = 0; j < nbLignes; ++j){
                 for(int k = 0; k < nbColonnes; ++k){
-                    attendu[j][k] = ((long) attendu[j][k] * 1e10) / 1e10;
+                    try {
+                        assertTrue(Math.abs(attendu[j][k] - resultat[j][k]) < 1e-10);
+                    } catch (AssertionError e){
+                        System.err.println("Erreur lors du test n°" + (i+1) + "\n" +
+                                "Attendu (± 1e-10)\t: " + attendu[j][k] + "\n" +
+                                "Obtenu\t\t\t\t: " + resultat[j][k]);
+                        throw e;
+                    }
                 }
-            }
-
-            try {
-                assertArrayEquals(attendu, resultat);
-            } catch (AssertionError e){
-                System.err.printf("Erreur lors du test n°%d :\n",i+1);
-                e.printStackTrace();
             }
         }
 

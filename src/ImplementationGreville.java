@@ -82,8 +82,8 @@ public class ImplementationGreville {
                 for (int j = 0; j < cCol && notNullCount == 0; ++j) {
                     laValeur = c.get(i, j);
                     if (laValeur != 0.0) {
-                        //On fait une approxiamtion à 10^-10
-                        if (((long) laValeur * 1e10) / 1e10 == 0.0) {
+                        //Regarde si en faisant une approximation 10^-8 on est a 0
+                        if ( Math.abs(laValeur) < 1e-8 ) {
                             c.set(i, j, 0.0);
                             break;
                         }

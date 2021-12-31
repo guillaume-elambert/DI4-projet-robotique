@@ -27,12 +27,23 @@ public class Position {
     /**
      * Constructeur de confort
      *
-     * @param matriceXYZ La matrice contenant la position.
+     * @param matriceXYZ La {@link Matrix} contenant la position.
      */
     public Position(Matrix matriceXYZ){
         x = matriceXYZ.get(0,0);
         y = matriceXYZ.get(1,0);
         z = matriceXYZ.get(2, 0);
+    }
+
+    /**
+     * Constructeur de confort
+     *
+     * @param tableauXYZ Le tableau a 2 dimension contenant la position.
+     */
+    public Position(double[][] tableauXYZ){
+        x = tableauXYZ[0][0];
+        y = tableauXYZ[1][0];
+        z = tableauXYZ[2][0];
     }
 
 
@@ -45,6 +56,22 @@ public class Position {
         x = toCopy.x;
         y = toCopy.y;
         z = toCopy.z;
+    }
+
+
+    /**
+     * Méthode qui permet de verifier si 2 objets Position sont égaux.
+     *
+     * @param toCompareWith L'objet Position à comparé avec l'objet appelant.
+     * @return true si égaux, false sinon.
+     */
+    public boolean equals(Position toCompareWith){
+        return (
+                toCompareWith != null
+                && x == toCompareWith.getX()
+                && y == toCompareWith.getY()
+                && z == toCompareWith.getZ()
+        );
     }
 
 
@@ -65,7 +92,7 @@ public class Position {
     /**
      * Retourne l'objet sous forme de matrice.
      *
-     * @return La matrice position.
+     * @return La {@link Matrix} position.
      */
     public Matrix getAsMatrix(){
         return new Matrix(new double[][]{
