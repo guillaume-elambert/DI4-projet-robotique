@@ -193,8 +193,8 @@ public class Robot {
 
             //Si l'articulation est du type ROTATION, on récupère la prochaine variable articulaire
             paramsArticulation.setTheta(switch(leType){
-                case ROTATION -> Math.toRadians(variablesArticulaires[i]);
-                default -> Math.toRadians(paramsArticulation.getTheta());
+                case ROTATION -> variablesArticulaires[i];
+                default -> paramsArticulation.getTheta();
             });
 
             //Si l'articulation est du type TRANSLATION, on récupère la prochaine variable articulaire

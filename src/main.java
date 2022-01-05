@@ -28,7 +28,7 @@ public class main {
         do {
             System.out.println("Actions possibles :\n" +
                     "1) Utiliser un robot existant\n" +
-                    "2) Utiliser votre propre robot (θ et α en radians)\n");
+                    "2) Utiliser votre propre robot (θ et α en degrés)\n");
 
             do {
                 System.out.print("Saisir votre choix : ");

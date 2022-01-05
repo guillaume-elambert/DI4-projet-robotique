@@ -15,9 +15,9 @@
         "type": "ROTATION"
     }, {
         "denavit": {
-            "theta": 2.356194490192345,
+            "theta": 135.0,
             "d": 0.0,
-            "alpha": 1.5707963267948966,
+            "alpha": 90.0,
             "a": -0.2
         },
         "type": "ROTATION"
@@ -25,7 +25,7 @@
         "denavit": {
             "theta": 0.0,
             "d": 1.5,
-            "alpha": 1.5707963267948966,
+            "alpha": 90.0,
             "a": 0.0
         },
         "type": "TRANSLATION"

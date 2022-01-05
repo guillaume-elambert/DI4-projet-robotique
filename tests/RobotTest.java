@@ -51,7 +51,10 @@ class RobotTest {
         ));
 
         robots[1] = new Robot(base, articulations[1]);
-        String str = new Gson().toJson(robots[1]);
+        String str = new Gson().toJson(robots[0]);
+        System.out.println(str);
+
+        str = new Gson().toJson(robots[1]);
         System.out.println(str);
     }
 
@@ -115,7 +118,7 @@ class RobotTest {
             try {
                 assertArrayEquals(attendus.get(i), result.getArray());
             } catch (AssertionError e){
-                System.err.println("Erreur lors du test n°"+(i+1));
+                System.err.print("Erreur lors du test n°"+(i+1));
                 throw e;
             }
         }

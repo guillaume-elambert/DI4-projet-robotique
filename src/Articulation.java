@@ -48,7 +48,7 @@ public class Articulation {
      */
     public double getVariableArticulaire(){
         return switch (type) {
-            case ROTATION -> Math.toDegrees(this.denavit.getTheta());
+            case ROTATION -> this.denavit.getTheta();
             case TRANSLATION -> this.denavit.getD();
         };
     }
@@ -79,9 +79,9 @@ public class Articulation {
         double cosTheta, sinTheta, cosAlpha, sinAlpha;
 
         //On récupère les paramètres de Denavit
-        theta = denavit.getTheta();
+        theta = Math.toRadians(denavit.getTheta());
         d = denavit.getD();
-        alpha = denavit.getAlpha();
+        alpha = Math.toRadians(denavit.getAlpha());
         a = denavit.getA();
 
         //Calcul des sin et cos

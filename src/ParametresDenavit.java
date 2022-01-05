@@ -15,13 +15,13 @@ public class ParametresDenavit {
      *
      * @param theta Le paramètre θ (en degrés).
      * @param d     Le paramètre d.
-     * @param alpha Le paramètre α.
+     * @param alpha Le paramètre α (en degrés).
      * @param a     Le paramètre a.
      */
     public ParametresDenavit(double theta, double d, double alpha, double a) {
-        this.theta = Math.toRadians(theta);
+        this.theta = theta;
         this.d = d;
-        this.alpha = Math.toRadians(alpha);
+        this.alpha = alpha;
         this.a = a;
     }
 

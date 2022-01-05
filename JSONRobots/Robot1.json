@@ -5,24 +5,21 @@
         "y": 0.0,
         "z": 0.0
     },
-    "articulations": [
-        {
-            "denavit": {
-                "theta": 0.7853981633974483,
-                "d": 0.0,
-                "alpha": 0.0,
-                "a": 1.0
-            },
-            "type": "ROTATION"
+    "articulations": [{
+        "denavit": {
+            "theta": 45.0,
+            "d": 0.0,
+            "alpha": 0.0,
+            "a": 1.0
         },
-        {
-            "denavit": {
-                "theta": 1.5707963267948966,
-                "d": 0.0,
-                "alpha": 0.0,
-                "a": 1.0
-            },
-            "type": "ROTATION"
-        }
-    ]
+        "type": "ROTATION"
+    }, {
+        "denavit": {
+            "theta": 90.0,
+            "d": 0.0,
+            "alpha": 0.0,
+            "a": 1.0
+        },
+        "type": "ROTATION"
+    }]
 }
