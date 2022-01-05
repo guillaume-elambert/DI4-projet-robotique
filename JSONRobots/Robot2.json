@@ -1,0 +1,33 @@
+{
+    "architectureChanged": true,
+    "base": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "articulations": [{
+        "denavit": {
+            "theta": 0.0,
+            "d": 1.0,
+            "alpha": 0.0,
+            "a": 0.0
+        },
+        "type": "ROTATION"
+    }, {
+        "denavit": {
+            "theta": 2.356194490192345,
+            "d": 0.0,
+            "alpha": 1.5707963267948966,
+            "a": -0.2
+        },
+        "type": "ROTATION"
+    }, {
+        "denavit": {
+            "theta": 0.0,
+            "d": 1.5,
+            "alpha": 1.5707963267948966,
+            "a": 0.0
+        },
+        "type": "TRANSLATION"
+    }]
+}

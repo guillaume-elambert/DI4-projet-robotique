@@ -99,12 +99,12 @@ public class Robot {
 
         positionInitiale = getPositionOrganeTerminal(variablesArticulaires).getAsArray();
 
+        // On parcourt les variables articulaires
         for (int i = 0; i < nbVariablesArticulaires; i++) {
 
             //On copie la liste des variables articulaires
             System.arraycopy(variablesArticulaires, 0, nouvellesVariablesArticulaires, 0, nbVariablesArticulaires);
 
-            //nouvellesVariablesArticulaires = variablesArticulaires;
             nouvellesVariablesArticulaires[i] += epsilon;
 
             position2 = getPositionOrganeTerminal(nouvellesVariablesArticulaires).getAsArray();
@@ -140,7 +140,6 @@ public class Robot {
 
         //On s'arrête après maxIterations ou si on a obtenu la position attendue
         for(int i = 0; i < maxIterations && !objectifOrganeTerminal.equals(posOrgTerm = getPositionOrganeTerminal(variablesArticulaires)); ++i){
-            //System.out.println(posOrgTerm.toString()+"\n\n");
 
             // ΔX
             deltaPos = objectifMatrice.minus(posOrgTerm.getAsMatrix());
@@ -246,6 +245,24 @@ public class Robot {
         }
 
         return toReturn;
+    }
+
+
+    /**
+     * Méthode pour modifier l'ensemble des valeurs des variables
+     * articulaires des articulations qui composent le robot.
+     *
+     * @param nouvellesValeurs La liste de nouvelles variables articulaires.
+     */
+    public void setVariablesArticulaires(double[] nouvellesValeurs){
+
+        int nbArticulations = articulations.size();
+
+        if(nouvellesValeurs.length < nbArticulations) return;
+
+        for(int i = 0; i < nbArticulations; ++i){
+            articulations.get(i).setVariableArticulaire(nouvellesValeurs[i]);
+        }
     }
 
 

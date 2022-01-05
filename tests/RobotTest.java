@@ -1,4 +1,5 @@
 import Jama.Matrix;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,13 +21,11 @@ class RobotTest {
         articulations[0] = new ArrayList<>();
         articulations[0].add(new Articulation(
                 new ParametresDenavit(45, 0, 0, 1),
-                new Position(),
                 Articulation.Type.ROTATION
         ));
 
         articulations[0].add(new Articulation(
                 new ParametresDenavit(90, 0, 0, 1),
-                new Position(),
                 Articulation.Type.ROTATION
         ));
 
@@ -34,28 +33,26 @@ class RobotTest {
 
 
 
-
         //2ème architecture de robot à tester
         articulations[1] = new ArrayList<>();
         articulations[1].add(new Articulation(
                 new ParametresDenavit(0, 1, 0, 0),
-                new Position(),
                 Articulation.Type.ROTATION
         ));
 
         articulations[1].add(new Articulation(
                 new ParametresDenavit(135, 0, 90, -0.2),
-                new Position(),
                 Articulation.Type.ROTATION
         ));
 
         articulations[1].add(new Articulation(
                 new ParametresDenavit(0, 1.5, 90, 0),
-                new Position(),
                 Articulation.Type.TRANSLATION
         ));
 
         robots[1] = new Robot(base, articulations[1]);
+        String str = new Gson().toJson(robots[1]);
+        System.out.println(str);
     }
 
 
