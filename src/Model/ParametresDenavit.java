@@ -1,17 +1,22 @@
+package Model;
+
+/**
+ * La classe pour les paramètres de Denavit.
+ */
 public class ParametresDenavit {
 
-    private double theta, d, alpha, a;
+    /** Le paramètre θ (en degrés). */
+    private double theta;
+    /** Le paramètre d. */
+    private double d;
+    /** Le paramètre α (en degrés). */
+    private double alpha;
+    /** Le paramètre a. */
+    private double a;
 
 
     /**
-     * Constructeur par défaut.
-     */
-    public ParametresDenavit() {
-    }
-
-
-    /**
-     * Constructeur de confort.
+     * Constructeur.
      *
      * @param theta Le paramètre θ (en degrés).
      * @param d     Le paramètre d.
@@ -31,7 +36,7 @@ public class ParametresDenavit {
      *
      * @param toCopy L'objet à copier.
      */
-    public ParametresDenavit(ParametresDenavit toCopy){
+    public ParametresDenavit(ParametresDenavit toCopy) {
         theta = toCopy.theta;
         d = toCopy.d;
         alpha = toCopy.alpha;
@@ -44,11 +49,11 @@ public class ParametresDenavit {
      *
      * @return L'objet sous forme de chaîne de caractères.
      */
-    public String toString(){
-        return  "Theta (θ) = "+theta+"\n" +
-                "d = "+d+"\n" +
-                "Alpha (α) = "+alpha+"\n" +
-                "a = "+a;
+    public String toString() {
+        return "Theta (θ) = " + theta + "\n" +
+                "d = " + d + "\n" +
+                "Alpha (α) = " + alpha + "\n" +
+                "a = " + a;
     }
 
 

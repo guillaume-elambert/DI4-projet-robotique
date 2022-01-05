@@ -1,13 +1,23 @@
+package Model;
+
 import Jama.Matrix;
 
+/**
+ * Classe pour les articutlation.
+ */
 public class Articulation {
 
-    protected enum Type {
+    /** Les types d'articulation possibles. */
+    public enum Type {
+        /** Type Rotation. */
         ROTATION,
+        /** Type Translation. */
         TRANSLATION
     }
 
+    /** Les paramètres Denavit de l'articulation (@ref Model.ParametresDenavit "paramètres de Denavit"). */
     private ParametresDenavit denavit;
+    /** Le type de l'articulation. */
     private Type type;
 
 
@@ -21,7 +31,7 @@ public class Articulation {
     /**
      * Constructeur de confort.
      *
-     * @param denavit  Les {@link ParametresDenavit} de l'articulation.
+     * @param denavit  Les @ref Model.ParametresDenavit "paramètres de Denavit" de l'articulation.
      * @param type     Le type de l'articulation.
      */
     public Articulation(ParametresDenavit denavit, Type type) {
@@ -63,14 +73,14 @@ public class Articulation {
         switch (type) {
             case ROTATION -> this.denavit.setTheta(nouvelleValeur);
             case TRANSLATION -> this.denavit.setD(nouvelleValeur);
-        };
+        }
     }
 
 
     /**
      * Méthode qui retourne la matrice de Denavit de l'articulation.
      *
-     * @return La {@link Matrix} de Denavit de l'articulation.
+     * @return La <a href="https://math.nist.gov/javanumerics/jama/doc/Jama/Matrix.html">matrice</a> de Denavit de l'articulation.
      */
     public Matrix getMatriceDenavit(){
         Matrix matriceDenavit = null;

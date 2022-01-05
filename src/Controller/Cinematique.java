@@ -1,34 +1,33 @@
+package Controller;
+
 import Jama.Matrix;
+import Model.Articulation;
+import Model.ParametresDenavit;
+import Model.Position;
+import Model.Robot;
 
 import java.util.ArrayList;
 
-public class Robot {
+/**
+ * Classe pour les calculs de cinématique pour un objet @ref Model.Robot "robot".
+ */
+public class Cinematique {
 
-    private boolean architectureChanged;
-    private Position base;
-    private ArrayList<Articulation> articulations;
+    /** Le robot. */
+    private Robot robot;
+
+    /** La liste des matrices de transformation du robot. */
     private Matrix[] matricesTransformation;
 
-    /**
-     * Constructeur par défaut.
-     */
-    public Robot() {
-    }
-
 
     /**
-     * Constructeur de confort.
-     * Les matrices de transfomations sont relatives à l'articulation 1;
+     * Constructeur.
      *
-     * @param base          L'objet {@link Position} de la base du robot.
-     * @param articulations Les {@link Articulation} du robot.
+     * @param robot Le robot.
      */
-    public Robot(Position base, ArrayList<Articulation> articulations) {
-        this.base = base;
-        this.articulations = articulations;
-        architectureChanged = true;
+    public Cinematique(Robot robot) {
+        this.robot = robot;
     }
-
 
     /**
      * Méthode pour obtenir la position de l'organe terminal.
@@ -36,11 +35,11 @@ public class Robot {
      * @param variablesArticulaires Les variables articulaires à utiliser (si null, utilise celles de l'architecture actuelle).
      * @return La position de l'organe terminal.
      */
-    public Position getPositionOrganeTerminal(double[] variablesArticulaires){
+    public Position getPositionOrganeTerminal(double[] variablesArticulaires) {
         Matrix[] toUse;
 
         //Si null on utilise les matrices de transformation de l'architecture actuelle du robot
-        if(variablesArticulaires == null || variablesArticulaires.length == 0) {
+        if (variablesArticulaires == null || variablesArticulaires.length == 0) {
 
             //On met à jour les matrices de transformation si ça à lieu d'être.
             update();
@@ -50,7 +49,7 @@ public class Robot {
         }
 
         //Retourne les 3 premières lignes de la 4ème colonne de la matrice de transformation
-        return new Position(toUse[toUse.length-1].getMatrix(0, 2, 3, 3));
+        return new Position(toUse[toUse.length - 1].getMatrix(0, 2, 3, 3));
     }
 
 
@@ -60,11 +59,11 @@ public class Robot {
      * @param variablesArticulaires Les variables articulaires à utiliser (si null, utilise celles de l'architecture actuelle).
      * @return La matrice orientation.
      */
-    public Matrix getOrientationOrganeTerminal(double[] variablesArticulaires){
+    public Matrix getOrientationOrganeTerminal(double[] variablesArticulaires) {
         Matrix[] toUse;
 
         //Si null on utilise les matrices de transformation de l'architecture actuelle du robot
-        if(variablesArticulaires == null || variablesArticulaires.length == 0) {
+        if (variablesArticulaires == null || variablesArticulaires.length == 0) {
 
             //On met à jour les matrices de transformation si ça à lieu d'être.
             update();
@@ -84,11 +83,11 @@ public class Robot {
      * @param variablesArticulaires Les variables articulaires à utiliser (si null, utilise celles de l'architecture actuelle).
      * @return La matrice Jacobienne.
      */
-    public Matrix getMatriceJacobienne(double[] variablesArticulaires){
+    public Matrix getMatriceJacobienne(double[] variablesArticulaires) {
 
         //Si null on utilise les variables articulaires de l'architecture actuelle du robot
-        if(variablesArticulaires == null || variablesArticulaires.length == 0) {
-            variablesArticulaires = getVariablesArticulaires();
+        if (variablesArticulaires == null || variablesArticulaires.length == 0) {
+            variablesArticulaires = robot.getVariablesArticulaires();
         }
 
         int nbVariablesArticulaires = variablesArticulaires.length;
@@ -122,36 +121,36 @@ public class Robot {
     /**
      * Méthode qui calcule la valeur des variables articulaires afin d'arriver au plus proche de l'objectif.
      *
-     * @param objectifOrganeTerminal L'objet {@link Position} qui définit la position objectif de l'organe terminal.
-     * @param maxIterations Le nombre maximum d'itérations à effectuer.
+     * @param objectifOrganeTerminal L'objet @ref Model.Position "position" qui définit la position objectif de l'organe terminal.
+     * @param maxIterations          Le nombre maximum d'itérations à effectuer.
      * @return La liste des variables articulaires pour se rapprocher au mieux de l'objectif.
      */
-    public double[] resoudreVariablesArticulaires(Position objectifOrganeTerminal, int maxIterations){
+    public double[] resoudreVariablesArticulaires(Position objectifOrganeTerminal, int maxIterations) {
 
 
-        double[] variablesArticulaires = this.getVariablesArticulaires();
+        double[] variablesArticulaires = robot.getVariablesArticulaires();
         int nbVariablesArticulaires = variablesArticulaires.length;
         double[][] deltaTheta;
 
 
-        Position posOrgTerm = null;
+        Position posOrgTerm;
         Matrix deltaPos, pinvMatJacobienne, objectifMatrice = objectifOrganeTerminal.getAsMatrix();
 
 
         //On s'arrête après maxIterations ou si on a obtenu la position attendue
-        for(int i = 0; i < maxIterations && !objectifOrganeTerminal.equals(posOrgTerm = getPositionOrganeTerminal(variablesArticulaires)); ++i){
+        for (int i = 0; i < maxIterations && !objectifOrganeTerminal.equals(posOrgTerm = getPositionOrganeTerminal(variablesArticulaires)); ++i) {
 
             // ΔX
             deltaPos = objectifMatrice.minus(posOrgTerm.getAsMatrix());
 
             // "J^-1(θ)"
-            pinvMatJacobienne = ImplementationGreville.greville(getMatriceJacobienne(variablesArticulaires));
+            pinvMatJacobienne = Greville.calculerPseudoInverse(getMatriceJacobienne(variablesArticulaires));
 
             // Δθ = "J^-1(θ)" * ΔX
             deltaTheta = pinvMatJacobienne.times(deltaPos).getArray();
 
             // On met à jour les variables articulaires
-            for(int j = 0; j < nbVariablesArticulaires; ++j) {
+            for (int j = 0; j < nbVariablesArticulaires; ++j) {
                 variablesArticulaires[j] += deltaTheta[j][0];
             }
         }
@@ -164,15 +163,15 @@ public class Robot {
      * Cette fonction calcule les matrices de transformation.
      *
      * @param variablesArticulaires Les variables articulaires à utiliser (si null, utilise celles de l'architecture actuelle).
-     * @return La liste des {@link Matrix} de transformation de Denavit.
+     * @return La liste des <a href="https://math.nist.gov/javanumerics/jama/doc/Jama/Matrix.html">matrice</a> de transformation de Denavit.
      */
     public Matrix[] calculerMatricesTransformation(double[] variablesArticulaires) {
 
-        Robot robotCopy = this.copy();
+        Robot robotCopy = robot.copy();
 
         ArrayList<Articulation> articulations = robotCopy.getArticulations();
         int nbArticulations = articulations.size();
-        Matrix transformation = Matrix.identity(4,4);
+        Matrix transformation = Matrix.identity(4, 4);
         Matrix[] T = new Matrix[nbArticulations];
 
         Articulation uneArticulation;
@@ -180,25 +179,25 @@ public class Robot {
         Articulation.Type leType;
 
 
-        if(variablesArticulaires == null || variablesArticulaires.length == 0) {
-            variablesArticulaires = getVariablesArticulaires();
+        if (variablesArticulaires == null || variablesArticulaires.length == 0) {
+            variablesArticulaires = robot.getVariablesArticulaires();
         }
 
         // On parcourt les articulations en partant de la fin
-        for (int i = 0; i < nbArticulations; ++i){
+        for (int i = 0; i < nbArticulations; ++i) {
 
             uneArticulation = articulations.get(i);
             paramsArticulation = uneArticulation.getDenavit();
             leType = uneArticulation.getType();
 
             //Si l'articulation est du type ROTATION, on récupère la prochaine variable articulaire
-            paramsArticulation.setTheta(switch(leType){
+            paramsArticulation.setTheta(switch (leType) {
                 case ROTATION -> variablesArticulaires[i];
                 default -> paramsArticulation.getTheta();
             });
 
             //Si l'articulation est du type TRANSLATION, on récupère la prochaine variable articulaire
-            paramsArticulation.setD(switch(leType){
+            paramsArticulation.setD(switch (leType) {
                 case TRANSLATION -> variablesArticulaires[i];
                 default -> paramsArticulation.getD();
             });
@@ -211,10 +210,11 @@ public class Robot {
             T[i] = transformation.copy();
         }
 
+        Position base = robot.getBase();
         Matrix baseMatrix = new Matrix(new double[][]{
-                { base.getX() },
-                { base.getY() },
-                { base.getZ() }
+                {base.getX()},
+                {base.getY()},
+                {base.getZ()}
         });
 
         int rowTostart = 0, rowToEnd = 2, column = 3;
@@ -231,97 +231,44 @@ public class Robot {
 
 
     /**
-     * Méthode pour obtenir l'ensemble des valeurs des variables
-     * articulaires des articulations qui composent le robot.
-     *
-     * @return La liste des valeurs des variables articulaires.
-     */
-    public double[] getVariablesArticulaires(){
-        int nbArticulations = articulations.size();
-        double[] toReturn = new double[nbArticulations];
-
-        for(int i = 0; i < nbArticulations; ++i){
-            toReturn[i] = articulations.get(i).getVariableArticulaire();
-        }
-
-        return toReturn;
-    }
-
-
-    /**
-     * Méthode pour modifier l'ensemble des valeurs des variables
-     * articulaires des articulations qui composent le robot.
-     *
-     * @param nouvellesValeurs La liste de nouvelles variables articulaires.
-     */
-    public void setVariablesArticulaires(double[] nouvellesValeurs){
-
-        int nbArticulations = articulations.size();
-
-        if(nouvellesValeurs.length < nbArticulations) return;
-
-        for(int i = 0; i < nbArticulations; ++i){
-            articulations.get(i).setVariableArticulaire(nouvellesValeurs[i]);
-        }
-    }
-
-
-    /**
      * Méthode qui met à jour les matrices de transformation si cela à lieu d'être.
      */
-    public void update(){
-        if(architectureChanged){
-            matricesTransformation = calculerMatricesTransformation(getVariablesArticulaires());
+    public void update() {
+        if (robot.isArchitectureChanged()) {
+            matricesTransformation = calculerMatricesTransformation(robot.getVariablesArticulaires());
+            robot.setArchitectureChanged(false);
         }
     }
 
 
     /**
-     * Méthode qui permet de copier un robot.
-     *
-     * @return La copie du robot.
+     * @return the robot
      */
-    public Robot copy(){
-        ArrayList<Articulation> articulationsCopy = new ArrayList<Articulation>();
-
-        for(Articulation uneArticulation : articulations){
-            articulationsCopy.add(new Articulation(uneArticulation));
-        }
-
-        return new Robot(new Position(this.base), articulationsCopy);
+    public Robot getRobot() {
+        return robot;
     }
 
 
-	/**
-	 * @return the base
-	 */
-	public Position getBase() {
-		return base;
-	}
+    /**
+     * @param robot the robot to set
+     */
+    public void setRobot(Robot robot) {
+        this.robot = robot;
+    }
 
 
-	/**
-	 * @param base the base to set
-	 */
-	public void setBase(Position base) {
-        architectureChanged = !this.base.equals(base);
-        architectureChanged = true;
-	}
+    /**
+     * @return the matricesTransformation
+     */
+    public Matrix[] getMatricesTransformation() {
+        return matricesTransformation;
+    }
 
 
-	/**
-	 * @return the articulations
-	 */
-	public ArrayList<Articulation> getArticulations() {
-		return articulations;
-	}
-
-
-	/**
-	 * @param articulations the articulations to set
-	 */
-	public void setArticulations(ArrayList<Articulation> articulations) {
-        architectureChanged = !this.articulations.equals(articulations);
-		this.articulations = articulations;
-	}
+    /**
+     * @param matricesTransformation the matricesTransformation to set
+     */
+    public void setMatricesTransformation(Matrix[] matricesTransformation) {
+        this.matricesTransformation = matricesTransformation;
+    }
 }

@@ -1,15 +1,19 @@
+package Controller;
+
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ImplementationGrevilleTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    @Test
-    void grevilleTest() {
-        ArrayList<Matrix> matrices = new ArrayList<>();
-        ArrayList<double[][]> attendus = new ArrayList<>();
+class GrevilleTest {
+
+    static ArrayList<double[][]> attendus = new ArrayList<>();
+    static ArrayList<Matrix> matrices = new ArrayList<>();
+
+    static {
+
 
         matrices.add(new Matrix(new double[][]{
                 {1, 0, 0},
@@ -28,9 +32,12 @@ class ImplementationGrevilleTest {
                 {-1, 3, 6},
                 {4, 7, -5}
         }));
+    }
 
 
-        /* RESULTATS ATTENDUS */
+    @Test
+    void calculPseudoInverse() {
+        attendus.clear();
 
         attendus.add(new double[][]{
                 {1, 0, 0},
@@ -50,12 +57,11 @@ class ImplementationGrevilleTest {
         });
 
 
-
         int nbLignes, nbColonnes, nbTests = matrices.size();
         double[][] resultat, attendu;
 
         for(int i = 0; i < nbTests; ++i) {
-            resultat = ImplementationGreville.greville(matrices.get(i)).getArray();
+            resultat = Greville.calculerPseudoInverse(matrices.get(i)).getArray();
             attendu = attendus.get(i);
             nbLignes = resultat.length;
             nbColonnes = resultat[0].length;
@@ -75,7 +81,5 @@ class ImplementationGrevilleTest {
                 }
             }
         }
-
     }
-
 }

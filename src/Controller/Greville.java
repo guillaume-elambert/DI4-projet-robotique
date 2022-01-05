@@ -1,43 +1,29 @@
+package Controller;
+
 import Jama.Matrix;
 
+/**
+ * Classe d'implémentation de l'algorithme de Greville.
+ */
+public class Greville {
 
-public class ImplementationGreville {
+    /**
+     * Méthode d'implémentation de l'algorithme de Greville.
+     * Calcul l'inverse ou la pseudo inverse d'une matrice.
+     *
+     * @param matriceAInverser La matrice à inverser.
+     * @return L'inverse ou la pseudo inverse de la matrice.
+     */
+    public static Matrix calculerPseudoInverse(Matrix matriceAInverser) {
 
-    static Matrix matA, resultat;
-
-    public static void main(String[] args) {
-
-        matA = new Matrix(new double[][]{
-                {1, 0, 0},
-                {0, 2, 0},
-                {0, 0, 4}
-        });
-
-        resultat = greville(matA);
-        System.out.println("Résultat final :");
-        resultat.print(5, 5);
-
-
-        matA = new Matrix(new double[][]{
-                {1, 4, 2},
-                {3, 1, 7}
-        });
-
-        resultat = greville(matA);
-        System.out.println("Résultat final :");
-        resultat.print(5, 5);
-    }
-
-
-    static Matrix greville(Matrix matA) {
-
+        if (matriceAInverser == null) return null;
 
         Matrix matAPlus, matAk, matAPlusk, transpose, a, b, c, d;
         int n, m, rowMatAPlusk;
 
 
-        n = matA.getRowDimension();
-        m = matA.getColumnDimension();
+        n = matriceAInverser.getRowDimension();
+        m = matriceAInverser.getColumnDimension();
 
         matAPlus = new Matrix(1, n);
 
@@ -45,7 +31,7 @@ public class ImplementationGreville {
         /*======== 1ere iteration ========*/
 
         //On récupère la 1ère colonne
-        a = matA.getMatrix(0, n - 1, 0, 0);
+        a = matriceAInverser.getMatrix(0, n - 1, 0, 0);
 
         if (!a.equals(new Matrix(n, 1))) {
             transpose = a.transpose();
@@ -59,11 +45,11 @@ public class ImplementationGreville {
         double dDouble;
 
         for (int k = 1; k < m; ++k) {
-            matAk = matA.getMatrix(0, n - 1, 0, k - 1);
+            matAk = matriceAInverser.getMatrix(0, n - 1, 0, k - 1);
             matAPlusk = matAPlus.getMatrix(0, k - 1, 0, n - 1);
 
 
-            a = matA.getMatrix(0, n - 1, k, k);
+            a = matriceAInverser.getMatrix(0, n - 1, k, k);
 
             d = matAPlusk.times(a);
 
@@ -83,7 +69,7 @@ public class ImplementationGreville {
                     laValeur = c.get(i, j);
                     if (laValeur != 0.0) {
                         //Regarde si en faisant une approximation 10^-8 on est a 0
-                        if ( Math.abs(laValeur) < 1e-8 ) {
+                        if (Math.abs(laValeur) < 1e-8) {
                             c.set(i, j, 0.0);
                             break;
                         }
@@ -119,5 +105,4 @@ public class ImplementationGreville {
 
         return matAPlus;
     }
-
 }

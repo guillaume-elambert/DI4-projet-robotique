@@ -1,18 +1,22 @@
+package Model;
+
 import Jama.Matrix;
 
+/**
+ * Classe pour les positions.
+ */
 public class Position {
 
-    private double x, y, z;
+    /** La position en x.*/
+    private double x;
+    /** La position en y.*/
+    private double y;
+    /** La position en z.*/
+    private double z;
+
 
     /**
-     * Constructeur par défaut.
-     */
-    public Position() {
-    }
-
-
-    /**
-     * Constructeur de confort
+     * Constructeur.
      *
      * @param x La position sur l'axe x.
      * @param y La position sur l'axe y.
@@ -27,11 +31,11 @@ public class Position {
     /**
      * Constructeur de confort
      *
-     * @param matriceXYZ La {@link Matrix} contenant la position.
+     * @param matriceXYZ La <a href="https://math.nist.gov/javanumerics/jama/doc/Jama/Matrix.html">matrice</a> contenant la position.
      */
-    public Position(Matrix matriceXYZ){
-        x = matriceXYZ.get(0,0);
-        y = matriceXYZ.get(1,0);
+    public Position(Matrix matriceXYZ) {
+        x = matriceXYZ.get(0, 0);
+        y = matriceXYZ.get(1, 0);
         z = matriceXYZ.get(2, 0);
     }
 
@@ -40,7 +44,7 @@ public class Position {
      *
      * @param tableauXYZ Le tableau a 2 dimension contenant la position.
      */
-    public Position(double[][] tableauXYZ){
+    public Position(double[][] tableauXYZ) {
         x = tableauXYZ[0][0];
         y = tableauXYZ[1][0];
         z = tableauXYZ[2][0];
@@ -50,9 +54,9 @@ public class Position {
     /**
      * Constructeur de recopie.
      *
-     * @param toCopy L'objet Position à copier.
+     * @param toCopy L'objet Model.Position à copier.
      */
-    public Position(Position toCopy){
+    public Position(Position toCopy) {
         x = toCopy.x;
         y = toCopy.y;
         z = toCopy.z;
@@ -60,17 +64,17 @@ public class Position {
 
 
     /**
-     * Méthode qui permet de verifier si 2 objets Position sont égaux.
+     * Méthode qui permet de verifier si 2 objets Model.Position sont égaux.
      *
-     * @param toCompareWith L'objet Position à comparé avec l'objet appelant.
+     * @param toCompareWith L'objet Model.Position à comparé avec l'objet appelant.
      * @return true si égaux, false sinon.
      */
-    public boolean equals(Position toCompareWith){
+    public boolean equals(Position toCompareWith) {
         return (
                 toCompareWith != null
-                && x == toCompareWith.getX()
-                && y == toCompareWith.getY()
-                && z == toCompareWith.getZ()
+                        && x == toCompareWith.getX()
+                        && y == toCompareWith.getY()
+                        && z == toCompareWith.getZ()
         );
     }
 
@@ -80,7 +84,7 @@ public class Position {
      *
      * @return Le tableau à 2 dimensions de la position.
      */
-    public double[][] getAsArray(){
+    public double[][] getAsArray() {
         return new double[][]{
                 {x},
                 {y},
@@ -92,9 +96,9 @@ public class Position {
     /**
      * Retourne l'objet sous forme de matrice.
      *
-     * @return La {@link Matrix} position.
+     * @return La <a href="https://math.nist.gov/javanumerics/jama/doc/Jama/Matrix.html">matrice</a> position.
      */
-    public Matrix getAsMatrix(){
+    public Matrix getAsMatrix() {
         return new Matrix(new double[][]{
                 {x},
                 {y},
@@ -108,9 +112,9 @@ public class Position {
      *
      * @return L'objet sous forme de chaîne de caractères.
      */
-    public String toString(){
-        return  "x : " + x +"\n"+
-                "y : " + y +"\n"+
+    public String toString() {
+        return "x : " + x + "\n" +
+                "y : " + y + "\n" +
                 "z : " + z;
     }
 
