@@ -129,4 +129,60 @@ public class Robot {
     public void setArchitectureChanged(boolean architectureChanged) {
         this.architectureChanged = architectureChanged;
     }
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((articulations == null) ? 0 : articulations.hashCode());
+		result = prime * result + ((base == null) ? 0 : base.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Robot)) {
+			return false;
+		}
+		Robot other = (Robot) obj;
+		if (articulations == null) {
+			if (other.articulations != null) {
+				return false;
+			}
+		} else if (!articulations.equals(other.articulations)) {
+			return false;
+		}
+		if (base == null) {
+			if (other.base != null) {
+				return false;
+			}
+		} else if (!base.equals(other.base)) {
+			return false;
+		}
+		return true;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Robot [base=" + base + ", articulations=" + articulations + "]";
+	}
+
 }

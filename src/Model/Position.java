@@ -108,18 +108,6 @@ public class Position {
 
 
     /**
-     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
-     *
-     * @return L'objet sous forme de chaîne de caractères.
-     */
-    public String toString() {
-        return "x : " + x + "\n" +
-                "y : " + y + "\n" +
-                "z : " + z;
-    }
-
-
-    /**
      * @return the x
      */
     public double getX() {
@@ -165,4 +153,57 @@ public class Position {
     public void setZ(double z) {
         this.z = z;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Position)) {
+			return false;
+		}
+		Position other = (Position) obj;
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z)) {
+			return false;
+		}
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Position [x=" + x + ", y=" + y + ", z=" + z + "]";
+	}
+    
 }

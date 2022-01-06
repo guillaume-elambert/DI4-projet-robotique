@@ -112,15 +112,6 @@ public class Articulation {
         return matriceDenavit;
     }
 
-    /**
-     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
-     *
-     * @return L'objet sous forme de chaîne de caractères.
-     */
-    public String toString(){
-        return  "Type : " + this.type.toString()+"\n\n" +
-                "Denavit : \n" + denavit.toString();
-    }
 
     /**
      * @return the denavit
@@ -152,4 +143,56 @@ public class Articulation {
 	public void setType(Type type) {
 		this.type = type;
 	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((denavit == null) ? 0 : denavit.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Articulation)) {
+			return false;
+		}
+		Articulation other = (Articulation) obj;
+		if (denavit == null) {
+			if (other.denavit != null) {
+				return false;
+			}
+		} else if (!denavit.equals(other.denavit)) {
+			return false;
+		}
+		if (type != other.type) {
+			return false;
+		}
+		return true;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Articulation [denavit=" + denavit + ", type=" + type + "]";
+	}
+    
 }

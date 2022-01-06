@@ -29,6 +29,7 @@ public class Cinematique {
         this.robot = robot;
     }
 
+
     /**
      * Méthode pour obtenir la position de l'organe terminal.
      *

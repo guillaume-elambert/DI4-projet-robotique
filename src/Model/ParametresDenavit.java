@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Objects;
+
 /**
  * La classe pour les paramètres de Denavit.
  */
@@ -41,19 +43,6 @@ public class ParametresDenavit {
         d = toCopy.d;
         alpha = toCopy.alpha;
         a = toCopy.a;
-    }
-
-
-    /**
-     * Méthode pour obtenir l'objet sous forme de chaîne de caractères.
-     *
-     * @return L'objet sous forme de chaîne de caractères.
-     */
-    public String toString() {
-        return "Theta (θ) = " + theta + "\n" +
-                "d = " + d + "\n" +
-                "Alpha (α) = " + alpha + "\n" +
-                "a = " + a;
     }
 
 
@@ -121,4 +110,62 @@ public class ParametresDenavit {
     }
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(a);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(alpha);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(d);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(theta);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof ParametresDenavit)) {
+			return false;
+		}
+		ParametresDenavit other = (ParametresDenavit) obj;
+		if (Double.doubleToLongBits(a) != Double.doubleToLongBits(other.a)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(alpha) != Double.doubleToLongBits(other.alpha)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(d) != Double.doubleToLongBits(other.d)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(theta) != Double.doubleToLongBits(other.theta)) {
+			return false;
+		}
+		return true;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ParametresDenavit [theta=" + theta + ", d=" + d + ", alpha=" + alpha + ", a=" + a + "]";
+	}
 }

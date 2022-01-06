@@ -55,11 +55,6 @@ class CinematiqueTest {
         ));
 
         robots[1] = new Robot(base, articulations[1]);
-        String str = new Gson().toJson(robots[0]);
-        System.out.println(str);
-
-        str = new Gson().toJson(robots[1]);
-        System.out.println(str);
     }
 
 
