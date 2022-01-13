@@ -4,7 +4,6 @@ import Model.Articulation;
 import Model.ParametresDenavit;
 import Model.Position;
 import Model.Robot;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

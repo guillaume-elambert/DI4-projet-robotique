@@ -42,8 +42,8 @@ public class Cinematique {
         //Si null on utilise les matrices de transformation de l'architecture actuelle du robot
         if (variablesArticulaires == null || variablesArticulaires.length == 0) {
 
-            //On met à jour les matrices de transformation si ça à lieu d'être.
-            update();
+            //On met à jour les matrices de transformation.
+            matricesTransformation = calculerMatricesTransformation(robot.getVariablesArticulaires());
             toUse = matricesTransformation;
         } else {
             toUse = calculerMatricesTransformation(variablesArticulaires);
@@ -66,8 +66,8 @@ public class Cinematique {
         //Si null on utilise les matrices de transformation de l'architecture actuelle du robot
         if (variablesArticulaires == null || variablesArticulaires.length == 0) {
 
-            //On met à jour les matrices de transformation si ça à lieu d'être.
-            update();
+            //On met à jour les matrices de transformation.
+            matricesTransformation = calculerMatricesTransformation(robot.getVariablesArticulaires());
             toUse = matricesTransformation;
         } else {
             toUse = calculerMatricesTransformation(variablesArticulaires);
@@ -228,17 +228,6 @@ public class Cinematique {
         }
 
         return T;
-    }
-
-
-    /**
-     * Méthode qui met à jour les matrices de transformation si cela à lieu d'être.
-     */
-    public void update() {
-        if (robot.isArchitectureChanged()) {
-            matricesTransformation = calculerMatricesTransformation(robot.getVariablesArticulaires());
-            robot.setArchitectureChanged(false);
-        }
     }
 
 

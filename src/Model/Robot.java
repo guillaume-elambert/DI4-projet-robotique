@@ -1,14 +1,13 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * La classe pour les robots.
  */
 public class Robot {
 
-    /** Variable pour savoir si l'architecture du robot à été changée. */
-    private transient boolean architectureChanged; //transient pour éviter l'export en JSON
     /** La @ref Model.Position "position" de la base. */
     private Position base;
     /** La liste des @ref Model.Articulation "articulation" du robot. */
@@ -25,7 +24,6 @@ public class Robot {
     public Robot(Position base, ArrayList<Articulation> articulations) {
         this.base = base;
         this.articulations = articulations;
-        architectureChanged = true;
     }
 
 
@@ -93,7 +91,6 @@ public class Robot {
      * @param base the base to set
      */
     public void setBase(Position base) {
-        architectureChanged = !this.base.equals(base);
         this.base = base;
     }
 
@@ -110,74 +107,31 @@ public class Robot {
      * @param articulations the articulations to set
      */
     public void setArticulations(ArrayList<Articulation> articulations) {
-        architectureChanged = !this.articulations.equals(articulations);
         this.articulations = articulations;
     }
 
 
-    /**
-     * @return the architectureChanged
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean isArchitectureChanged() {
-        return architectureChanged;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Robot robot)) return false;
+        return getBase().equals(robot.getBase()) && getArticulations().equals(robot.getArticulations());
     }
 
 
-    /**
-     * @param architectureChanged the architectureChanged to set
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
      */
-    public void setArchitectureChanged(boolean architectureChanged) {
-        this.architectureChanged = architectureChanged;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBase(), getArticulations());
     }
 
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((articulations == null) ? 0 : articulations.hashCode());
-		result = prime * result + ((base == null) ? 0 : base.hashCode());
-		return result;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Robot)) {
-			return false;
-		}
-		Robot other = (Robot) obj;
-		if (articulations == null) {
-			if (other.articulations != null) {
-				return false;
-			}
-		} else if (!articulations.equals(other.articulations)) {
-			return false;
-		}
-		if (base == null) {
-			if (other.base != null) {
-				return false;
-			}
-		} else if (!base.equals(other.base)) {
-			return false;
-		}
-		return true;
-	}
-
-
-	/* (non-Javadoc)
+    /* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
